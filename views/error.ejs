@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>
+        <%= error.status %>
+    </title>
+    <meta name="description" content="<%= error.message %>">
+    <meta name="author" content="t@wse.nyc">
+    <link rel='stylesheet' href='/css/error.css' />
+    <style type="text/css">
+        html {
+            background: #ffffff url('/img/<%= error.status %>.jpg') no-repeat fixed center center;
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="code">
+        <%= error.status %>
+    </div>
+
+    <div class="msg">
+        <%= error.message %>
+    </div>
+
+    <div class="small">
+        <%= error.ip %>
+    </div>
+
+    <div class="debug" id="errorStack">
+        <%= error.stack %>
+    </div>
+
+
+</body>
+
+</html>
