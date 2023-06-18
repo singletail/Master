@@ -2,6 +2,8 @@ const Geo = require('../models/geo.js');
 const axios = require('axios');
 const log = require('../config/logger.js');
 
+let debug = false;
+
 const geo_lookup = async (ip) => {
   const geo_uri = `http://ip-api.com/json/${ip}?fields=50593791`;
   let reply = [];
@@ -13,7 +15,7 @@ const geo_lookup = async (ip) => {
       reply = response['data'];
     }
   } catch (error) {
-    log.warn('Bad Geo Request');
+    log.warn('Bad Geo Request: ' + error.message);
   }
   return reply;
 };
@@ -32,51 +34,38 @@ const generate_summary = (geo) => {
 };
 
 const geolocation = async (req, res, next) => {
-  let returnString = '';
-  let offset = 0;
-  let geo = await Geo.findOne({ ip: req.real_ip });
+  let geo = await Geo.findOne({ ip: req.ip });
   if (!geo) {
-    let geodata = await geo_lookup(req.real_ip);
-    if (geodata.status == 'success') {
-      let geoEntry = new Geo();
-      geoEntry.ip = req.real_ip;
-      geoEntry.country = geodata.country;
-      geoEntry.countryCode = geodata.countryCode;
-      geoEntry.region = geodata.region;
-      geoEntry.regionName = geodata.regionName;
-      geoEntry.city = geodata.city;
-      geoEntry.zip = geodata.zip;
-      geoEntry.lat = geodata.lat;
-      geoEntry.lon = geodata.lon;
-      geoEntry.timezone = geodata.timezone;
-      geoEntry.offset = geodata.offset;
-      geoEntry.isp = geodata.isp;
-      geoEntry.org = geodata.org;
-      geoEntry.as = geodata.as;
-      geoEntry.reverse = geodata.reverse;
-      geoEntry.mobile = geodata.mobile;
-      geoEntry.proxy = geodata.proxy;
-      geoEntry.hosting = geodata.hosting;
-      returnString = generate_summary(geodata);
-      geoEntry.summary = returnString;
-      geoEntry.save();
-      if (geodata.offset) {
-        offset = Number(geodata.offset);
+    if (debug) {
+      log.info('No entry found -- New Geo Lookup for ' + req.ip);
+    }
+    let geodata = await geo_lookup(req.ip);
+    if (geodata.status != 'success') {
+      log.warn('Bad Geo Response for ' + req.ip);
+    } else {
+      if (debug) {
+        log.info('Got geodata: ' + JSON.stringify(geodata));
+      }
+      geo = new Geo();
+      geo.ip = req.ip;
+      for (let key in geodata) {
+        geo[key] = geodata[key];
+      }
+      geo.footer = generate_summary(geodata);
+      if (debug) {
+        log.info('geo.footer set to: ' + geo.footer);
       }
     }
-  } else {
-    returnString = geo.summary;
+  }
+  if (geo) {
+    if (debug) {
+      log.info('At end. footer is now ' + geo.footer.toString());
+    }
+    req.userData.geo.footer = geo.footer ?? '';
+    req.userData.geo.offset = geo.offset ?? 0;
     geo.last = Date.now();
     geo.save();
-    if (geo.offset) {
-      offset = Number(geo.offset);
-    }
   }
-  if (!offset) {
-    offset = 0;
-  }
-  req.geo = returnString;
-  req.geo_offset = offset;
   next();
 };
 

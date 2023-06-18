@@ -14,7 +14,7 @@ const col = {
   r: '\u001b[0m',
 };
 
-const pathstring = (stackStr) => {
+const pathstringcolor = (stackStr) => {
   let color_string = `${col.orange}[unknown]${col.r}`;
   let stack = stackStr.split('\n');
   if (stack.length > 2) {
@@ -22,12 +22,28 @@ const pathstring = (stackStr) => {
     let stack2 = stack_line.split('/');
     let stack3 = stack2[stack2.length - 1].split(':');
     let directory = stack2[stack2.length - 2];
-    let filename = stack3[0].slice(0, stack3[0].indexOf('.'));
+    let filename = stack3[0];
     let line_num = stack3[1];
     let char_num = stack3[2].slice(0, stack3[2].length - 1);
-    color_string = `${col.orange}[${directory}]${col.r}${col.yellow}[${filename}]${col.r}${col.green}[${line_num}]${col.r}${col.blue}[${char_num}]${col.r}`;
+    color_string = `${col.orange}[${directory}/${filename}]${col.r}${col.yellow}[${line_num}:${char_num}]${col.r}`;
   }
   return color_string;
+};
+
+const pathstring = (stackStr) => {
+  let path_string = `[unknown]`;
+  let stack = stackStr.split('\n');
+  if (stack.length > 2) {
+    let stack_line = stack[stack.length - 2];
+    let stack2 = stack_line.split('/');
+    let stack3 = stack2[stack2.length - 1].split(':');
+    let directory = stack2[stack2.length - 2];
+    let filename = stack3[0];
+    let line_num = stack3[1];
+    let char_num = stack3[2].slice(0, stack3[2].length - 1);
+    path_string = `[${directory}/${filename}][${line_num}:${char_num}]`;
+  }
+  return path_string;
 };
 
 const colorizeFormat = format.colorize({
@@ -41,15 +57,15 @@ const colorizeFormat = format.colorize({
     info: 'blue',
     debug: 'violet',
   },
-  all: true,
+  level: true,
 });
 
 const fileFormat = printf(({ level, message, label, timestamp }) => {
-  return `${timestamp} ${label} ${level}: ${message}`;
+  return `[${timestamp}]${label}[${level}]: ${message}`;
 });
 
 const consoleFormat = printf(({ level, message, label, timestamp }) => {
-  return `${col.red}[${timestamp}]${col.r}${label}[${level}] ${message}`;
+  return `${col.red}[${timestamp}]${col.r}${label}[${level}] ${col.green}${message}`;
 });
 
 const log = createLogger({
@@ -57,14 +73,18 @@ const log = createLogger({
     new transports.Console({
       format: combine(
         colorizeFormat,
-        timestamp({ format: 'HH:mm:ss' }),
-        label({ label: pathstring(new Error().stack) }),
+        timestamp({ format: 'YYYY-MM-DD][HH:mm:ss' }),
+        label({ label: pathstringcolor(new Error().stack) }),
         consoleFormat
       ),
     }),
     new transports.File({
       filename: '/var/dev/ai/server/log.log',
-      format: combine(format.cli(), timestamp(), format.align(), fileFormat),
+      format: combine(
+        timestamp({ format: 'YYYY-MM-DD][HH:mm:ss' }),
+        label({ label: pathstring(new Error().stack) }),
+        fileFormat
+      ),
     }),
   ],
 });

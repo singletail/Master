@@ -16,6 +16,10 @@ const config = {
     redirect: false,
   },
 
+  db: {
+    uri: process.env['MONGO_DB_URI'],
+  },
+
   openai: {
     key: process.env['OPENAI_KEY'],
   },

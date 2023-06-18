@@ -1,5 +1,6 @@
 const config = require('./config');
 const app = require('./app');
+const db = require('./app/db.js');
 
 //const express = require('express');
 //const http = require('http');
@@ -42,10 +43,7 @@ io.on('connection', (socket) => {
 });
 */
 
-//app.get('/', async (req, res) => {
-//  console.log(`reached index`);
-//  res.send('Server is running');
-//});
+db();
 
 app.listen(config.port, () => {
   console.log(`${config.name} ${config.version} ${config.port}`);

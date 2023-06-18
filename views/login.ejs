@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>
+        <%= data.title %>
+    </title>
+    <link rel='stylesheet' href='/css/init.css' />
+</head>
+
+<body>
+    <div class="login_bk">&nbsp;</div>
+    <div class="box">
+        <br /><br />
+        <span class="msg">
+            <%= data.msg %>
+        </span>
+        <br /><br />
+        <a href="/auth/bnet">
+            <div class="btn">Login via Battle.net</div>
+        </a>
+        <a href="/auth/google">
+            <div class="btn">Login via Google</div>
+        </a>
+        <a href="/auth/steam">
+            <div class="btn">Login via Steam</div>
+        </a>
+    </div>
+    <%- include('header') -%>
+    <%- include('footer') -%>
+</body>
+</html>
