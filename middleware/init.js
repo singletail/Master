@@ -13,7 +13,6 @@ const initUserData = async (req, res, next) => {
       offset: 0,
     },
   };
-  log.info(`initUserData()`);
   next();
 };
 

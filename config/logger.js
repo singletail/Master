@@ -14,52 +14,6 @@ const col = {
   r: '\x1b[0m',
 };
 
-const pathstringcolor = () => {
-  let err = new Error();
-  Error.captureStackTrace(err);
-  // const pathstringcolor = (err) => {
-  let stackStr = err.stack;
-  let color_string = `${col.orange}[unknown]${col.r}`;
-  let stack = stackStr.split('\n');
-  console.log('');
-  console.log(
-    `${col.magenta}_________________________________________________________`
-  );
-  console.log(stack);
-  if (stack.length > 2) {
-    let stack_line = stack[stack.length - 2];
-    console.log('________________ stack_line');
-    console.log(stack_line);
-    let stack2 = stack_line.split('/');
-    let stack3 = stack2[stack2.length - 1].split(':');
-    let directory = stack2[stack2.length - 2];
-    let filename = stack3[0];
-    let line_num = stack3[1];
-    let char_num = stack3[2].slice(0, stack3[2].length - 1);
-    color_string = `⑯${col.orange}[${directory}/${filename}]${col.r}${col.yellow}[${line_num}:${char_num}]${col.r}`;
-  }
-  return color_string;
-};
-
-const pathstring = (stackStr) => {
-  let path_string = `[unknown]`;
-  let stack = stackStr.split('\n');
-  console.log('');
-  console.log('_________________________________________________________');
-  console.log(stack);
-  if (stack.length > 2) {
-    let stack_line = stack[stack.length - 2];
-    let stack2 = stack_line.split('/');
-    let stack3 = stack2[stack2.length - 1].split(':');
-    let directory = stack2[stack2.length - 2];
-    let filename = stack3[0];
-    let line_num = stack3[1];
-    let char_num = stack3[2].slice(0, stack3[2].length - 1);
-    path_string = `[${directory}/${filename}][${line_num}:${char_num}]`;
-  }
-  return path_string;
-};
-
 const infoString = {
   emerg: `${col.red}[🔥EMERG🔥]`,
   alert: `${col.red}[ALERT]`,
