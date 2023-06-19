@@ -1,5 +1,5 @@
 const Banned = require('../models/ban.js');
-const log = require('../config/logger.js');
+const log = require('../config/logger.js')(module);
 
 const banip = async (ip, reason, request) => {
   let ban = new Banned({ ip: ip, reason: reason, request: request });

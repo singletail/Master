@@ -9,8 +9,9 @@ const blacklist = require('../middleware/blacklist');
 const geolocation = require('../middleware/geolocation');
 const tracker = require('../middleware/tracker');
 const authenticate = require('../middleware/userauth');
-const log = require('../config/logger.js');
+const log = require('../config/logger.js')(module);
 const expressLog = require('../middleware/expressLogger.js');
+const errorLog = require('../middleware/errorLogger.js');
 const trapRouter = require('../routes/trap.js');
 const indexRouter = require('../routes/index.js');
 const userRouter = require('../routes/user.js');
@@ -48,5 +49,6 @@ app.use('/auth', authRouter);
 app.use('/debug', debugRouter);
 app.use('/', errorRouter);
 
+app.use(errorLog);
 app.use(errorHandler);
 module.exports = app;

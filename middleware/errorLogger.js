@@ -13,7 +13,7 @@ const consoleFormat = winston.format.printf(
   }
 );
 
-const expressLog = expressWinston.logger({
+const errorLog = expressWinston.errorLogger({
   transports: [
     new winston.transports.Console(),
     new winston.transports.File({
@@ -27,9 +27,9 @@ const expressLog = expressWinston.logger({
     consoleFormat
   ),
   meta: false,
-  msg: `[ⱥ REQUEST][{{req.ip}}][{{req.method}}][{{req.url}}][{{res.statusCode}}][{{res.responseTime}}ms] `,
+  msg: `[䆺 ERROR][{{req.ip}}][{{req.method}}][{{req.url}}][{{res.statusCode}}][{{res.responseTime}}ms] ⼌ {{err.status}} {{err.msg}} `,
   expressFormat: false,
   colorize: false,
 });
 
-module.exports = expressLog;
+module.exports = errorLog;

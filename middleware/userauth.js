@@ -1,4 +1,4 @@
-const log = require('../config/logger.js');
+const log = require('../config/logger.js')(module);
 const jwt = require('../modules/jwt');
 const User = require('../models/user.js');
 

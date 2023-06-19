@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const log = require('../config/logger.js');
+const log = require('../config/logger.js')(module);
 
 router.get('/login', async (req, res) => {
   let data = {

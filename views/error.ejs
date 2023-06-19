@@ -26,15 +26,14 @@
         <%= error.message %>
     </div>
 
-    <div class="small">
-        <%= error.ip %>
+    <div class="note">
+        <%= error.note %>
     </div>
 
-    <div class="debug" id="errorStack">
-        <%= error.stack %>
+    <div class="debug">
+        <%= error.debug %>
     </div>
 
-
+    <%- include('footer') -%>
 </body>
-
 </html>

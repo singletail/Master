@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const jose = require('jose');
 const config = require('../config');
-const log = require('../config/logger.js');
+const log = require('../config/logger.js')(module);
 
 const jwt_private = fs.readFileSync(config.jwt.private, 'utf8');
 //const jwt_public = fs.readFileSync(config.jwt.public, "utf8");

@@ -1,6 +1,6 @@
 const Geo = require('../models/geo.js');
 const axios = require('axios');
-const log = require('../config/logger.js');
+const log = require('../config/logger.js')(module);
 
 let debug = false;
 

@@ -1,3 +1,5 @@
+const log = require('../config/logger')(module);
+
 const initUserData = async (req, res, next) => {
   req.userData = {
     name: 'Guest',
@@ -11,6 +13,7 @@ const initUserData = async (req, res, next) => {
       offset: 0,
     },
   };
+  log.info(`initUserData()`);
   next();
 };
 
