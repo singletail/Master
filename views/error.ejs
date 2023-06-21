@@ -4,14 +4,14 @@
 <head>
     <meta charset="utf-8">
     <title>
-        <%= error.status %>
+        <%= err.status %>
     </title>
-    <meta name="description" content="<%= error.message %>">
+    <meta name="description" content="<%= err.message %>">
     <meta name="author" content="t@wse.nyc">
     <link rel='stylesheet' href='/css/error.css' />
     <style type="text/css">
         html {
-            background: #ffffff url('/img/<%= error.status %>.jpg') no-repeat fixed center center;
+            background: #ffffff url('/img/<%= err.status %>.jpg') no-repeat fixed center center;
             background-size: cover;
         }
     </style>
@@ -19,19 +19,19 @@
 
 <body>
     <div class="code">
-        <%= error.status %>
+        <%= msg.status %>
     </div>
 
     <div class="msg">
-        <%= error.message %>
+        <%= msg.message %>
     </div>
 
     <div class="note">
-        <%= error.note %>
+        <%= msg.note %>
     </div>
 
     <div class="debug">
-        <%= error.debug %>
+        <%= msg.debug %>
     </div>
 
     <%- include('footer') -%>

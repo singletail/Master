@@ -1,70 +1,75 @@
-const { createLogger, format, transports } = require('winston');
-const { combine, timestamp, label, printf } = format;
+const { createLogger, format, transports } = require('winston')
+const config = require('.')
+const g = require('./glyphs')
+const { color, bgcolor } = require('./colors')
 
-const col = {
-  red: '\x1b[1;31m',
-  orange: '\x1b[38;5;208m',
-  yellow: '\x1b[1;33m',
-  green: '\x1b[1;32m',
-  blue: '\x1b[1;34m',
-  violet: '\x1b[1;35m',
-  pink: '\u001b[38;5;201m',
-  magenta: '\u001b[38;5;198m',
-  cyan: '\x1b[1;36m',
-  r: '\x1b[0m',
-};
+const levelString = (level) => {
+    const str = level.toUpperCase()
+    switch (level) {
+        case 'emerg':
+            return `${bgcolor('red')}[${g(level)}${str}]${color('r')}`
+        case 'alert':
+            return `${bgcolor('orange')}[${g(level)}${str}]${color('r')}`
+        case 'crit':
+            return `${bgcolor('yellow')}[${g(level)}${str}]${color('r')}`
+        case 'error':
+            return `${color('red')}[${g(level)}${str}]${color('r')}`
+        case 'warn':
+            return `${color('orange')}[${g(level)}${str}]${color('r')}`
+        case 'notice':
+            return `${color('cyan')}[${g(level)}${str}]${color('r')}`
+        case 'info':
+            return `${color('green')}[${g(level)}${str}]${color('r')}`
+        case 'debug':
+            return `${color('violet')}[${g(level)}${str}]${color('r')}`
+        default:
+            return `${color('blue')}[${g(level)}${str}]${color('r')}`
+    }
+}
 
-const infoString = {
-  emerg: `${col.red}[🔥EMERG🔥]`,
-  alert: `${col.red}[ALERT]`,
-  crit: `${col.red}[CRIT]`,
-  error: `${col.red}[ERROR]`,
-  warn: `${col.orange}[WARN]`,
-  notice: `${col.cyan}[NOTICE]`,
-  info: `${col.green}[INFO]`,
-  debug: `${col.violet}[DEBUG]`,
-};
+const fileFormat = format.printf(
+    ({ level, message, label, timestamp }) =>
+        `[${timestamp}]${label}[${level}]: ${message}`
+)
 
-const fileFormat = printf(({ level, message, label, timestamp }) => {
-  return `[${timestamp}]${label}[${level}]: ${message}`;
-});
-
-const consoleFormat = printf(({ level, message, label, timestamp }) => {
-  return `${col.red}[${timestamp}]${col.r}${label}${infoString[level]} ${message}${col.r}`;
-});
+const consoleFormat = format.printf(
+    ({ level, message, label, timestamp }) =>
+        `${color('red')}[${timestamp}]${color('r')}${label}${levelString(
+            level
+        )} ${message}${color('r')}`
+)
 
 const colorLabel = (filename) => {
-  let pA = filename.split('/');
-  return `${col.orange}[${pA[pA.length - 2]}]${col.r}${col.yellow}[${
-    pA[pA.length - 1]
-  }]${col.r}`;
-};
+    const pA = filename.split('/')
+    return `${color('orange')}[${pA[pA.length - 2]}]${color('r')}${color(
+        'yellow'
+    )}[${pA[pA.length - 1]}]${color('r')}`
+}
 
 const plainLabel = (filename) => {
-  let pA = filename.split('/');
-  return `[${pA[pA.length - 2]}][${pA[pA.length - 1]}]`;
-};
+    const pA = filename.split('/')
+    return `[${pA[pA.length - 2]}][${pA[pA.length - 1]}]`
+}
 
-const log = (mod) => {
-  return createLogger({
-    transports: [
-      new transports.Console({
-        format: combine(
-          timestamp({ format: 'YYYY-MM-DD][HH:mm:ss' }),
-          label({ label: colorLabel(mod.filename) }),
-          consoleFormat
-        ),
-      }),
-      new transports.File({
-        filename: '/var/dev/ai/server/log.log',
-        format: combine(
-          timestamp({ format: 'YYYY-MM-DD][HH:mm:ss' }),
-          label({ label: plainLabel(mod.filename) }),
-          fileFormat
-        ),
-      }),
-    ],
-  });
-};
+const log = (mod) =>
+    createLogger({
+        transports: [
+            new transports.Console({
+                format: format.combine(
+                    format.timestamp({ format: 'YYYY-MM-DD][HH:mm:ss' }),
+                    format.label({ label: colorLabel(mod.filename) }),
+                    consoleFormat
+                ),
+            }),
+            new transports.File({
+                filename: config.log.file,
+                format: format.combine(
+                    format.timestamp({ format: 'YYYY-MM-DD][HH:mm:ss' }),
+                    format.label({ label: plainLabel(mod.filename) }),
+                    fileFormat
+                ),
+            }),
+        ],
+    })
 
-module.exports = log;
+module.exports = log

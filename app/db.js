@@ -1,18 +1,34 @@
-const config = require('../config');
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
+const config = require('../config')
+const log = require('../config/logger')(module)
 
-const Tracker = require('../models/tracker.js');
-const Geo = require('../models/geo.js');
-const Ban = require('../models/ban.js');
-const User = require('../models/user.js');
-const Authentication = require('../models/auth.js');
+mongoose.connection.on('connecting', () => {
+    log.info(
+        `Mongoose Connecting. readyState: ${mongoose.connection.readyState}`
+    )
+})
+mongoose.connection.on('connected', () => {
+    log.info(
+        `Mongoose Connected. readyState: ${mongoose.connection.readyState}`
+    )
+})
+mongoose.connection.on('disconnecting', () => {
+    log.info(
+        `Mongoose Disconnecting. readyState: ${mongoose.connection.readyState}`
+    )
+})
+mongoose.connection.on('disconnected', () => {
+    log.info(
+        `Mongoose Disconnected. readyState: ${mongoose.connection.readyState}`
+    )
+})
 
 async function db() {
-  try {
-    await mongoose.connect(config.db.uri);
-  } catch (error) {
-    console.log(`Mongoose Error ${error}`);
-  }
+    try {
+        await mongoose.connect(config.db.uri)
+    } catch (error) {
+        log.error(`Mongoose Error ${error}`)
+    }
 }
 
-module.exports = db;
+module.exports = db

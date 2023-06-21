@@ -1,18 +1,22 @@
-const log = require('../config/logger.js')(module);
+const log = require('../config/logger')(module)
 
 const ErrorHandler = (err, req, res, next) => {
-  log.error(`${req.ip} ${req.url} ${err}`);
-  err.ip = req.ip;
-  err.note = '';
-  err.debug = err.stack;
-  if (err.status === 401) {
-    err.message = 'Fuck You';
-    err.note =
-      'You will never amount to anything in life.\n\nDo your family a favor.\n\nKill yourself.\n\nToday.\n\nNow.';
-    err.debug = '';
-  }
-  res.status(err.status || 500);
-  res.render('error', { error: err, user: req.userData });
-};
+    log.error(`${req.ip} ${req.url} ${err}`)
+    const msg = {
+        status: err.status || 500,
+        message: err.message || 'Something went wrong',
+        note: err.note || '',
+        debug: err.stack || '',
+    }
+    if (err.status === 401) {
+        msg.message = 'Kill Yourself'
+        msg.note =
+            'You will never amount to anything in life.\n\nDo your family a favor.\n\nOff yourself.\n\nToday.\n\nNow.'
+        msg.debug = ''
+    }
+    res.status(err.status || 500)
+    res.render('error', { err, msg, user: req.userData })
+    next()
+}
 
-module.exports = ErrorHandler;
+module.exports = ErrorHandler

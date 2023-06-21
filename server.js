@@ -1,50 +1,22 @@
-const config = require('./config');
-const app = require('./app');
-const db = require('./app/db.js');
+const { createServer } = require('http')
+const app = require('./app')
+const config = require('./config')
+const db = require('./app/db')
+const log = require('./config/logger')(module)
+const wssServer = require('./app/wss')
 
-//const express = require('express');
-//const http = require('http');
-//const { Server } = require('socket.io');
-//const axios = require('axios');
+db()
 
-//const app = express();
-//const server = http.createServer(app);
-//const io = new Server(server);
+const server = createServer(app)
+const wss = wssServer(server)
 
-/*
-io.on('connection', (socket) => {
-  console.log('a user connected');
-
-  socket.on('message', async (message) => {
-    try {
-      const response = await axios.post(
-        API_URL,
-        { prompt: message, max_tokens: 100 },
-        {
-          headers: {
-            'Authorization': `Bearer ${YOUR_OPENAI_KEY}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      const reply = response.data.choices[0].text.trim();
-
-      // Emit the response back to the client
-      socket.emit('reply', reply);
-    } catch (error) {
-      console.error(error);
-    }
-  });
-
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-});
-*/
-
-db();
-
-app.listen(config.port, () => {
-  console.log(`${config.name} ${config.version} ${config.port}`);
-});
+server.listen(config.port, () => {
+    log.info('---------------------------------------------')
+    log.info(`${config.name} v${config.version} ${config.description}`)
+    log.info(`${config.url} v${config.port} ${config.nodeEnv}`)
+    log.info(`at ${new Date().toUTCString()}`)
+    log.info(`DB ${config.db.uri}`)
+    log.info(`HTTP ${server.address().port} max: ${server.getMaxListeners()} `)
+    log.info(`WSS ${wss.address().port} max: ${wss.getMaxListeners()} `)
+    log.info('---------------------------------------------')
+})
