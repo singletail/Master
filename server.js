@@ -14,6 +14,7 @@ server.listen(config.port, () => {
     log.info('---------------------------------------------')
     log.info(`${config.name} v${config.version} ${config.description}`)
     log.info(`${config.url} v${config.port} ${config.nodeEnv}`)
+    log.info(`Node ${process.version} ${process.platform} ${process.arch}`)
     log.info(`at ${new Date().toUTCString()}`)
     log.info(`DB ${config.db.uri}`)
     log.info(`HTTP ${server.address().port} max: ${server.getMaxListeners()} `)

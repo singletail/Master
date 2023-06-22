@@ -15,6 +15,14 @@ const config = {
         redirect: false,
     },
 
+    client: {
+        dotfiles: 'deny',
+        extensions: ['html'],
+        index: false,
+        maxAge: '1d',
+        redirect: false,
+    },
+
     db: {
         uri: process.env.MONGO_DB_URI,
     },

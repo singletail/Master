@@ -1,8 +1,11 @@
+// import { handler } from 'client/build/handler'
+
 const express = require('express')
 const helmet = require('helmet')
 const cors = require('cors')
 const hpp = require('hpp')
 const cookieParser = require('cookie-parser')
+
 const config = require('../config')
 const initUserData = require('../middleware/init')
 const blacklist = require('../middleware/blacklist')
@@ -33,6 +36,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(hpp())
 app.use(cookieParser())
 app.use(express.static('static', config.static))
+// app.use('/client', express.static('/var/dev/ai/client/build', config.client))
 
 app.use(initUserData)
 app.use(blacklist)
@@ -40,6 +44,7 @@ app.use(geolocation)
 app.use(tracker.check)
 app.use(authenticate)
 app.use(expressLog)
+// app.use(handler)
 
 app.use('/', trapRouter)
 app.use('/', indexRouter)

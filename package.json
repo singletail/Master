@@ -9,6 +9,7 @@
   "author": "t@wse.nyc",
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "@simplewebauthn/server": "^7.3.0",
     "axios": "^1.4.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
