@@ -1,41 +1,42 @@
 {
-  "name": "ai_server",
+  "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "server.mjs",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "t@wse.nyc",
   "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "eslint": "^8.43.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.8"
+  },
   "dependencies": {
-    "@simplewebauthn/server": "^7.3.0",
+    "@simplewebauthn/server": "^7.3.1",
     "axios": "^1.4.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
-    "dotenv": "^16.1.4",
+    "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "express-winston": "^4.2.0",
     "helmet": "^7.0.0",
     "hpp": "^0.2.3",
     "jose": "^4.14.4",
-    "mongoose": "^7.3.0",
+    "mongoose": "^7.3.1",
     "passport": "^0.6.0",
     "uuid": "^9.0.0",
     "winston": "^3.9.0",
     "ws": "^8.13.0"
   },
-  "devDependencies": {
-    "eslint": "^8.43.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-prettier": "^4.2.1",
-    "prettier": "^2.8.8"
-  },
   "optionalDependencies": {
     "bufferutil": "^4.0.7",
-    "utf-8-validate": "^5.0.10"
+    "utf-8-validate": "^6.0.3"
   }
 }
