@@ -1,13 +1,11 @@
-import WebSocketServer from 'ws'
-import log from '../config/logger.mjs'
-// import * as logger from '../config/logger.mjs'
+import { WebSocketServer } from 'ws'
+import logger from '../config/logger.mjs'
 
-// const log = logger(module)
+const log = logger.child({ src: import.meta.url })
 
 const wssServer = (server) => {
-  const wss = new WebSocketServer({
-    server,
-  })
+  log.warn(server)
+  const wss = new WebSocketServer({ server })
 
   wss.on('connection', (ws) => {
     ws.on('open', () => {

@@ -1,8 +1,7 @@
 import Banned from '../models/ban.mjs'
-import log from '../config/logger.mjs'
-// import * as logger from '../config/logger.mjs'
+import logger from '../config/logger.mjs'
 
-// const log = logger(module)
+const log = logger.child({ src: import.meta.url })
 
 const banip = async (ip, reason, request) => {
   const ban = new Banned({ ip, reason, request })

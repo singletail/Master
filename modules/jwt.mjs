@@ -1,10 +1,9 @@
 import * as fs from 'node:fs'
 import * as jose from 'jose'
 import config from '../config/config.mjs'
-import log from '../config/logger.mjs'
-// import * as logger from '../config/logger.mjs'
+import logger from '../config/logger.mjs'
 
-// const log = logger(module)
+const log = logger.child({ src: import.meta.url })
 
 const jwtPrivate = fs.readFileSync(config.jwt.private, 'utf8')
 let keyPrivate = ''

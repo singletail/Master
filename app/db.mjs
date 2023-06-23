@@ -1,9 +1,8 @@
 import { mongoose } from 'mongoose'
 import config from '../config/config.mjs'
-import log from '../config/logger.mjs'
-// import * as logger from '../config/logger.mjs'
+import logger from '../config/logger.mjs'
 
-// const log = logger(module)
+const log = logger.child({ src: import.meta.url })
 
 mongoose.connection.on('connecting', () => {
   log.info(`Mongoose Connecting. readyState: ${mongoose.connection.readyState}`)

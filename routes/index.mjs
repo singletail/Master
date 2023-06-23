@@ -1,10 +1,8 @@
 import express from 'express'
-import log from '../config/logger.mjs'
-// import * as logger from '../config/logger.mjs'
+import logger from '../config/logger.mjs'
 
+const log = logger.child({ src: import.meta.url })
 const router = express.Router()
-
-// const log = logger(module)
 
 /*
 router.get('/', async (req, res) => {

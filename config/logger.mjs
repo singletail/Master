@@ -1,10 +1,9 @@
-// import { createLogger, format, transports } from 'winston'
 import * as winston from 'winston'
 import config from './config.mjs'
 import g from './glyphs.mjs'
 import { color, bgcolor } from './colors.mjs'
 
-const levelString = (level) => {
+const levelStringColor = (level) => {
   const str = level.toUpperCase()
   switch (level) {
     case 'emerg':
@@ -28,46 +27,49 @@ const levelString = (level) => {
   }
 }
 
-const fileFormat = winston.format.printf(
-  ({ level, message, label, timestamp }) =>
-    `[${timestamp}]${label}[${level}]: ${message}`
+const levelString = (level) => `[${level.toUpperCase()}]`
+
+const metaFormatColor = winston.format.printf(
+  ({ level, message, label, timestamp, ...metadata }) => {
+    let out = `${color('red')}[${timestamp}]`
+    if (metadata.src !== undefined) {
+      const pathArray = metadata.src.split('/')
+      out += `${color('orange')}[${pathArray[pathArray.length - 2]}]${color(
+        'yellow'
+      )}[${pathArray[pathArray.length - 1]}]`
+    }
+    out += `${levelStringColor(level)} ${message}${color('r')}`
+    return out
+  }
 )
 
-const consoleFormat = winston.format.printf(
-  ({ level, message, label, timestamp }) =>
-    `${color('red')}[${timestamp}]${color('r')}${label}${levelString(
-      level
-    )} ${message}${color('r')}`
+const metaFormat = winston.format.printf(
+  ({ level, message, label, timestamp, ...metadata }) => {
+    let out = `[${timestamp}]`
+    if (metadata.src !== undefined) {
+      const pathArray = metadata.src.split('/')
+      out += `[${pathArray[pathArray.length - 2]}][${
+        pathArray[pathArray.length - 1]
+      }]`
+    }
+    out += `${levelString(level)} ${message}}`
+    return out
+  }
 )
 
-const colorLabel = (filename) => {
-  const pA = filename.split('/')
-  return `${color('orange')}[${pA[pA.length - 2]}]${color('r')}${color(
-    'yellow'
-  )}[${pA[pA.length - 1]}]${color('r')}`
-}
-
-const plainLabel = (filename) => {
-  const pA = filename.split('/')
-  return `[${pA[pA.length - 2]}][${pA[pA.length - 1]}]`
-}
-
-// const log = (mod) =>
 const log = winston.createLogger({
   transports: [
     new winston.transports.Console({
       format: winston.format.combine(
         winston.format.timestamp({ format: 'YYYY-MM-DD][HH:mm:ss' }),
-        // format.label({ label: colorLabel(mod.filename) }),
-        consoleFormat
+        metaFormatColor
       ),
     }),
     new winston.transports.File({
       filename: config.log.file,
       format: winston.format.combine(
         winston.format.timestamp({ format: 'YYYY-MM-DD][HH:mm:ss' }),
-        // format.label({ label: plainLabel(mod.filename) }),
-        fileFormat
+        metaFormat
       ),
     }),
   ],

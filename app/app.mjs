@@ -1,10 +1,9 @@
-// import { handler } from 'client/build/handler'
-
 import express from 'express'
 import helmet from 'helmet'
 import cors from 'cors'
 import hpp from 'hpp'
 import cookieParser from 'cookie-parser'
+import { handler } from '../client/handler.js'
 
 import config from '../config/config.mjs'
 import initUserData from '../middleware/init.mjs'
@@ -44,13 +43,13 @@ app.use(geolocation)
 app.use(tracker)
 app.use(authenticate)
 app.use(expressLog)
-// app.use(handler)
 
 app.use('/', trapRouter)
-app.use('/', indexRouter)
+// app.use('/', indexRouter)
 app.use('/user', userRouter)
 app.use('/auth', authRouter)
 app.use('/debug', debugRouter)
+app.use(handler)
 app.use('/', errorRouter)
 
 app.use(errorLog)
