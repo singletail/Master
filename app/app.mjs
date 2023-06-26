@@ -3,7 +3,7 @@ import helmet from 'helmet'
 import cors from 'cors'
 import hpp from 'hpp'
 import cookieParser from 'cookie-parser'
-import { handler } from '../client/handler.js'
+import { handler } from "../servant/handler.js"
 
 import config from '../config/config.mjs'
 import initUserData from '../middleware/init.mjs'
@@ -17,6 +17,7 @@ import trapRouter from '../routes/trap.mjs'
 import indexRouter from '../routes/index.mjs'
 import userRouter from '../routes/user.mjs'
 import authRouter from '../routes/auth/auth.mjs'
+import apiRouter from '../routes/api.mjs'
 import debugRouter from '../routes/debug.mjs'
 import errorRouter from '../routes/errors.mjs'
 import errorHandler from '../middleware/error.mjs'
@@ -48,6 +49,7 @@ app.use('/', trapRouter)
 // app.use('/', indexRouter)
 app.use('/user', userRouter)
 app.use('/auth', authRouter)
+app.use('/api', apiRouter)
 app.use('/debug', debugRouter)
 app.use(handler)
 app.use('/', errorRouter)

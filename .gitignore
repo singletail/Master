@@ -131,6 +131,7 @@ dist
 
 # additions
 .env
+servant/
 private/
 logs/
 

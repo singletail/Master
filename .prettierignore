@@ -1,0 +1,9 @@
+app/app.mjs
+client/
+logs/
+node_modules/
+private/
+.env
+.gitignore
+package.json
+README.md

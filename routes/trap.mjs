@@ -27,4 +27,12 @@ router.get('/*.php7', async (req, res, next) => {
   next(err)
 })
 
+router.get('*uploadify*', async (req, res, next) => {
+  const reason = req.url
+  banip(req.ip, req.url, reason)
+  const err = new Error('Banned.')
+  err.status = 401
+  next(err)
+})
+
 export default router

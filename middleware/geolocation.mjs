@@ -44,8 +44,10 @@ const geolocation = async (req, res, next) => {
       geo = new Geo()
       geo.ip = req.ip
 
-      geodata.forEach((value, key) => {
-        geo[key] = value
+      Object.keys(geodata).forEach((key) => {
+        if (Object.prototype.hasOwnProperty.call(geodata, key)) {
+          geo[key] = geodata[key]
+        }
       })
 
       geo.footer = summary(geodata)
