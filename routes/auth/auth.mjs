@@ -13,7 +13,7 @@ router.get('/login', async (req, res) => {
     title: 'Login',
     msg: 'Select Authentication Method.',
   }
-  res.render('login', { data, user: req.userData })
+  res.render('login', { data, user: req.userdata })
 })
 
 router.get('/webauthn/generate', async (req, res) => {
@@ -24,7 +24,7 @@ router.get('/webauthn/generate', async (req, res) => {
     rpName,
     rpID,
     userID: 'fake-user-id',
-    userName: 'fake-user-name',
+    username: 'fake-user-name',
     attestationType: 'none',
     // Prevent users from re-registering existing authenticators
     /*

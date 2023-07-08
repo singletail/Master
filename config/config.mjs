@@ -7,6 +7,7 @@ const config = {
   // name: packageJson.name,
   // description: packageJson.description,
   url: process.env.URL,
+  salt: process.env.SALT,
 
   static: {
     dotfiles: 'deny',

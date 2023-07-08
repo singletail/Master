@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
     title: 'O',
     msg: 'Hai',
   }
-  res.render('index', { data, user: req.userData })
+  res.render('index', { data, user: req.userdata })
 })
 
 router.get('/temp', async (req, res, next) => {

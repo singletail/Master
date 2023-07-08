@@ -1,12 +1,16 @@
-const initUserData = async (req, res, next) => {
-  req.userData = {
-    name: 'Guest',
-    type: 'Sign In',
-    isBanned: false,
+const initUserdata = async (req, res, next) => {
+  req.userdata = {
+    ip: req.ip,
+    username: '',
+    displayName: '',
+    level: 0,
     isAdmin: false,
     isApproved: false,
-    isRegistered: false,
+    isAuthenticated: false,
     geo: {
+      region: '',
+      city: '',
+      countryCode: '',
       footer: '',
       offset: 0,
     },
@@ -14,4 +18,4 @@ const initUserData = async (req, res, next) => {
   next()
 }
 
-export default initUserData
+export default initUserdata

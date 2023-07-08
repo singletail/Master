@@ -1,31 +1,46 @@
-import jwt from '../modules/jwt.mjs'
 import Tracker from '../models/tracker.mjs'
+import * as jwt from '../modules/jwt.mjs'
+import * as x from '../modules/util.mjs'
+import logger from '../config/logger.mjs'
+
+const log = logger.child({ src: import.meta.url })
+
+const maxAge = 86400000 // 24 hours
 
 const tracker = async (req, res, next) => {
-  let trackerUuid
+  let tracker, stale
   if (req.cookies.tracker) {
-    trackerUuid = await jwt.verifyJWT(req.cookies.tracker)
-    if (trackerUuid) {
-      req.tracker = await Tracker.findOne({ uuid: trackerUuid })
-      if (req.tracker) {
-        req.tracker.$inc('num_requests', 1)
+    const claims = await jwt.verify(req.cookies.tracker)
+    if (claims) {
+      if (claims.iat < x.now() - maxAge) {
+        log.info(`Tracker token is stale ${claims.iat} ${x.now() - maxAge}`)
+        stale = true
+      }
+      tracker = await Tracker.findOne({ uuid: claims.sub })
+      if (tracker) {
+        tracker.numRequests += 1
       }
     }
   }
-  if (!trackerUuid) {
-    req.tracker = new Tracker()
-    trackerUuid = req.tracker.uuid
-    const unsignedJwt = await jwt.createJWT(trackerUuid)
-    const signedJwt = await jwt.signJWT(unsignedJwt)
-    res.cookie('tracker', signedJwt, {
+  if (!tracker) {
+      tracker = await new Tracker()
+      stale = true
+  }
+  tracker.last = Date.now()
+  tracker.ip.addToSet(req.ip)
+  await tracker.save()
+  req.tracker = tracker
+
+  if (stale) {
+    const trackerToken = await jwt.create('tracker', tracker.uuid )
+    const exp = await x.cookieExpByType('tracker')
+    res.cookie('tracker', trackerToken, {
       httpOnly: true,
       secure: true,
-      sameSite: 'none',
-      maxAge: 2592000000,
+      sameSite: 'Strict',
+      expires: exp,
     })
   }
-  req.tracker.ip.addToSet(req.ip)
-  req.tracker.save()
   next()
 }
 

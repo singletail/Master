@@ -17,7 +17,7 @@ const ErrorHandler = (err, req, res, next) => {
     msg.debug = ''
   }
   res.status(err.status || 500)
-  res.render('error', { err, msg, user: req.userData })
+  res.render('error', { err, msg, user: req.userdata })
   next()
 }
 

@@ -101,9 +101,9 @@ body {
     color: white;
     position: absolute;
     width: 60%;
-    height: 70%;
+    height: 50%;
     background: rgba(0, 0, 0, 0.8);
-    top: 15%;
+    top: 25%;
     left: 20%;
     z-index: 1000;
     text-align: center;
@@ -114,8 +114,8 @@ body {
     color: white;
     position: absolute;
     width: 90%;
-    height: 90%;
-    top: 5%;
+    height: 40%;
+    top: 15%;
     left: 5%;
     z-index: 1000;
     text-align: left;

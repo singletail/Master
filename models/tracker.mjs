@@ -11,14 +11,14 @@ const trackerSchema = new mongoose.Schema(
       index: true,
       unique: true,
     },
-    num_requests: { type: Number, default: 1 },
-    num_errors: { type: Number, default: 0 },
+    numRequests: { type: Number, default: 1 },
+    numErrors: { type: Number, default: 0 },
     ip: [{ type: String }],
     fingerprint: [{ type: String }],
     userid: { type: String },
     isBanned: { type: Boolean, default: false },
+    last: { type: Date, default: Date.now },
   },
-  { timestamps: true }
 )
 
 const Tracker = mongoose.model('Tracker', trackerSchema)

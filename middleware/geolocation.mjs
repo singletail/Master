@@ -57,8 +57,11 @@ const geolocation = async (req, res, next) => {
     }
   }
   if (geo) {
-    req.userData.geo.footer = geo.footer ?? ''
-    req.userData.geo.offset = geo.offset ?? 0
+    req.userdata.geo.region = geo.region ?? ''
+    req.userdata.geo.city = geo.city ?? ''
+    req.userdata.geo.countryCode = geo.countryCode ?? ''
+    req.userdata.geo.footer = geo.footer ?? ''
+    req.userdata.geo.offset = geo.offset ?? 0
     geo.last = Date.now()
     geo.save()
   }

@@ -3,11 +3,15 @@ import logger from '../config/logger.mjs'
 
 const log = logger.child({ src: import.meta.url })
 
+let sockets = []
+
 const wssServer = (server) => {
   log.warn(server)
-  const wss = new WebSocketServer({ server })
+  const wss = new WebSocketServer({ server });
 
-  wss.on('connection', (ws) => {
+  
+
+  wss.on('connection', (ws, req) => {
     ws.on('open', () => {
       log.info('open')
     })

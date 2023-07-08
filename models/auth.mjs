@@ -19,8 +19,8 @@ const AuthSchema = new Schema({
   providerUserId: { type: Number },
   created: { type: Date, default: Date.now },
   last: { type: Date, default: Date.now },
-  num_authorizations: { type: Number, default: 0 },
-  num_errors: { type: Number, default: 0 },
+  numAuthorizations: { type: Number, default: 0 },
+  numErrors: { type: Number, default: 0 },
   tracker: [{ type: String }],
   isBanned: { type: Boolean, default: false },
 })
