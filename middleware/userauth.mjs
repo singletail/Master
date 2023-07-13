@@ -8,6 +8,7 @@ const log = logger.child({ src: import.meta.url })
 
 const authenticate = async (req, res, next) => {
   let uuid, user, err, stale
+  let username = 'none'
   if (req.cookies.auth) {
     const authToken = await jwt.verify(req.cookies.auth)
     if (authToken.sub) {
@@ -27,6 +28,7 @@ const authenticate = async (req, res, next) => {
     user = await User.findOne({ uuid: uuid })
   }
   if (user) {
+    username = user.username
     if (user.isBanned || user.isLocked) {
       user = null
       err = {code: 401, message: 'User is banned or locked'}
@@ -45,6 +47,7 @@ const authenticate = async (req, res, next) => {
     }
     req.user = user
   }
+  log.info(`userauth done ${username}`)
   next()
 }
 

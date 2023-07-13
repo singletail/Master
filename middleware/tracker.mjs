@@ -41,6 +41,7 @@ const tracker = async (req, res, next) => {
       expires: exp,
     })
   }
+  log.info(`tracker done ${tracker.uuid}`)
   next()
 }
 

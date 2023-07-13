@@ -1,4 +1,5 @@
 import express from 'express'
+import bodyParser from 'body-parser'
 import Joi from 'joi'
 import * as users from '../../modules/users.mjs'
 import * as jwt from '../../modules/jwt.mjs'
@@ -7,6 +8,7 @@ import logger from '../../config/logger.mjs'
 
 const log = logger.child({ src: import.meta.url })
 const router = express.Router()
+const jsonParser = bodyParser.json()
 
 const regSchema = Joi.object({
     username: Joi.string()
@@ -22,19 +24,13 @@ const regSchema = Joi.object({
 })
 
 
-router.post('/login', async (req, res) => {
-    log.info(`POST /api/user/login ${req.ip} ${req.body.user.username} ${req.body.user.password}`)
-    
-    log.info(`${JSON.stringify(req.body)}`)
+router.post('/login', jsonParser, async (req, res) => {
+    log.info(`POST API login`);
+    log.info(JSON.stringify(req.body));
     let err, user, username, password
-    log.info(`API login req.body.user.username: ${req.body.user.username}`)
-    //log.info(`API login req.body.user.username: ${req.body.user.username}`)
-    if (req.body.user.username) {
-        username = req.body.user.username
-        password = req.body.user.password
-    //} else if (req.body.user.username) {
-    //    username = req.body.user.username
-    //    password = req.body.user.password
+    if (req.body.username) {
+        username = req.body.username
+        password = req.body.password
     }
     if (!username || !password) {
         err = { code: 422, msg: [`username and password are required`]}
@@ -53,6 +49,14 @@ router.post('/login', async (req, res) => {
     if (!err) {
         log.info(`user ${username} found. generating tokens.`)
         req.user = user
+
+        req.userdata.username = req.user.username
+        req.userdata.displayName =
+          req.user.displayName || req.user.username || 'Unknown User'
+        req.userdata.level = req.user.level
+        req.userdata.isAdmin = req.user.isAdmin
+        req.userdata.isAuthenticated = true
+
         const userToken = await jwt.create('user', user.uuid )
         const authToken = await jwt.create('auth', user.uuid )
         if (!userToken || !authToken) {
@@ -74,14 +78,13 @@ router.post('/login', async (req, res) => {
               expires: authExp,
             })
         }
-        res.status(200).json({ userdata: req.userdata })
+        res.json({ status: 200, userdata: req.userdata });
     } else {
-        res.status(err.code).json({ errors: err.msg })
+        res.json({ status: err.code, errors: err.msg })
     }
-    res.end()
 })
 
-router.post('/register', async (req, res) => {
+router.post('/register', jsonParser, async (req, res) => {
     log.info(`Pre-validation: ${JSON.stringify(req.body)}`)
     let err, username, password, user
     const val = regSchema.validate({
@@ -160,13 +163,13 @@ router.post('/register', async (req, res) => {
 
 
 
-router.post('/data', async (req, res) => {
+router.post('/data', jsonParser, async (req, res) => {
     log.info(`POST /api/user/data ${req.ip}`)
     res.status(200).json({ userdata: req.userdata })
     res.end()
 })
 
-router.post('/logout', async (req, res) => {
+router.post('/logout', jsonParser, async (req, res) => {
     log.info(`POST /api/user/logout ${req.ip}`)
     res.clearCookie('user')
     res.clearCookie('auth')

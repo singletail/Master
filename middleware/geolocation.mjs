@@ -65,6 +65,7 @@ const geolocation = async (req, res, next) => {
     geo.last = Date.now()
     geo.save()
   }
+  log.info(`geo done ${req.userdata.geo.footer}`)
   next()
 }
 

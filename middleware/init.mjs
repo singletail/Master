@@ -1,8 +1,12 @@
+import logger from '../config/logger.mjs'
+
+const log = logger.child({ src: import.meta.url })
+
 const initUserdata = async (req, res, next) => {
   req.userdata = {
     ip: req.ip,
-    username: '',
-    displayName: '',
+    username: 'none',
+    displayName: 'none',
     level: 0,
     isAdmin: false,
     isApproved: false,
@@ -15,6 +19,7 @@ const initUserdata = async (req, res, next) => {
       offset: 0,
     },
   }
+  log.info(`init done ${req.userdata.username}`)
   next()
 }
 

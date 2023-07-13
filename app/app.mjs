@@ -3,8 +3,6 @@ import helmet from 'helmet'
 import cors from 'cors'
 import hpp from 'hpp'
 import cookieParser from 'cookie-parser'
-import { handler } from "../servant/handler.js"
-
 import config from '../config/config.mjs'
 import initUserdata from '../middleware/init.mjs'
 import blacklist from '../middleware/blacklist.mjs'
@@ -15,7 +13,7 @@ import userdata from '../middleware/userdata.mjs'
 import expressLog from '../config/expressLogger.mjs'
 import errorLog from '../config/errorLogger.mjs'
 import trapRouter from '../routes/trap.mjs'
-//import indexRouter from '../routes/index.mjs'
+import indexRouter from '../routes/index.mjs'
 import userRouter from '../routes/user.mjs'
 import authRouter from '../routes/auth/auth.mjs'
 import apiRouter from '../routes/api/index.mjs'
@@ -31,7 +29,7 @@ app.set('views', '/var/dev/ai/server/views')
 app.set('view engine', 'ejs')
 
 app.use(helmet())
-app.use(cors({ origin: config.clientOrigins }))
+app.use(cors({ origin: '*'})) //config.clientOrigins }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(hpp())
@@ -47,12 +45,13 @@ app.use(userdata)
 app.use(expressLog)
 
 app.use('/', trapRouter)
-//app.use('/', indexRouter)
+app.use('/', indexRouter)
 app.use('/user', userRouter)
 app.use('/auth', authRouter)
 app.use('/api', apiRouter)
 app.use('/debug', debugRouter)
-app.use(handler)
+//app.use('/', express.static('/var/dev/ai/ass/dist/client/'));
+
 app.use('/', errorRouter)
 
 app.use(errorLog)
