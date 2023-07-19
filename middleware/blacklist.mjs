@@ -15,7 +15,7 @@ const blacklist = async (req, res, next) => {
     err.status = 401
     next(err)
   } else {
-    log.info(`ban check done ${req.ip}`)
+    //log.info(`ban check done ${req.ip}`)
     next()
   }
 }

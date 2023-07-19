@@ -10,7 +10,7 @@ const log = logger.child({ src: import.meta.url })
 db()
 
 const server = http.createServer(app)
-const wss = wssServer(server)
+const wss = await wssServer(server)
 
 server.listen(config.port, () => {
   log.info('---------------------------------------------')

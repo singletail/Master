@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.get('/', async (req, res) => {
   const jsonres = {
-    status: 'get ok',
+    status: '/api/test get ok',
     userdata: req.userdata,
   }
   res.json(jsonres)

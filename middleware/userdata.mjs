@@ -20,7 +20,7 @@ const userdata = async (req, res, next) => {
       expires: exp,
     })
   }
-  log.info(`userdata update done ${req.userdata.username}`)
+  //log.info(`userdata update done ${req.userdata.username}`)
   next()
 }
 

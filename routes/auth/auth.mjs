@@ -1,3 +1,7 @@
+// OLD
+
+/*
+
 import express from 'express'
 import SimpleWebAuthnServer from '@simplewebauthn/server'
 import logger from '../../config/logger.mjs'
@@ -27,14 +31,7 @@ router.get('/webauthn/generate', async (req, res) => {
     username: 'fake-user-name',
     attestationType: 'none',
     // Prevent users from re-registering existing authenticators
-    /*
-        excludeCredentials: userAuthenticators.map((authenticator) => ({
-            id: authenticator.credentialID,
-            type: 'public-key',
-            // Optional
-            transports: authenticator.transports,
-        })),
-        */
+
   })
   log.info(`WebAuthn Registration Request: ${JSON.stringify(options)}`)
   chal = options.challenge
@@ -61,3 +58,4 @@ router.post('/webauthn/verify', async (req, res, next) => {
 })
 
 export default router
+*/

@@ -47,7 +47,7 @@ const authenticate = async (req, res, next) => {
     }
     req.user = user
   }
-  log.info(`userauth done ${username}`)
+  //log.info(`userauth done ${username}`)
   next()
 }
 

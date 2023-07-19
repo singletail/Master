@@ -3,6 +3,7 @@ import helmet from 'helmet'
 import cors from 'cors'
 import hpp from 'hpp'
 import cookieParser from 'cookie-parser'
+
 import config from '../config/config.mjs'
 import initUserdata from '../middleware/init.mjs'
 import blacklist from '../middleware/blacklist.mjs'
@@ -12,14 +13,21 @@ import authenticate from '../middleware/userauth.mjs'
 import userdata from '../middleware/userdata.mjs'
 import expressLog from '../config/expressLogger.mjs'
 import errorLog from '../config/errorLogger.mjs'
+
+import { handler } from '../client/handler.js';
+
 import trapRouter from '../routes/trap.mjs'
+import cspRouter from '../routes/csp.mjs'
 import indexRouter from '../routes/index.mjs'
 import userRouter from '../routes/user.mjs'
-import authRouter from '../routes/auth/auth.mjs'
+//import authRouter from '../routes/auth/auth.mjs'
 import apiRouter from '../routes/api/index.mjs'
 import debugRouter from '../routes/debug.mjs'
 import errorRouter from '../routes/errors.mjs'
 import errorHandler from '../middleware/error.mjs'
+
+import logger from '../config/logger.mjs'
+const log = logger.child({ src: import.meta.url })
 
 const app = express()
 app.set('trust proxy', true)
@@ -28,8 +36,14 @@ app.set('case sensitive routing', true)
 app.set('views', '/var/dev/ai/server/views')
 app.set('view engine', 'ejs')
 
-app.use(helmet())
-app.use(cors({ origin: '*'})) //config.clientOrigins }))
+const corsOptions = {
+    origin: ['http://n0.tel', 'http://*.n0.tel', 'ws://n0.tel'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+}
+
+app.use(cors({'origin': '*'}))
+//app.use(helmet())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(hpp())
@@ -45,16 +59,25 @@ app.use(userdata)
 app.use(expressLog)
 
 app.use('/', trapRouter)
-app.use('/', indexRouter)
+app.use('/', cspRouter)
+//app.use('/', indexRouter)
 app.use('/user', userRouter)
-app.use('/auth', authRouter)
+//app.use('/auth', authRouter)
 app.use('/api', apiRouter)
 app.use('/debug', debugRouter)
 //app.use('/', express.static('/var/dev/ai/ass/dist/client/'));
+
+app.use(handler);
 
 app.use('/', errorRouter)
 
 app.use(errorLog)
 app.use(errorHandler)
+
+
+
+log.info(`Config: ${JSON.stringify(config)}`);
+
+log.warn(`***** ORIGIN: ${JSON.stringify(process.env.ORIGIN)}`);
 
 export default app

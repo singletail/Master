@@ -4,19 +4,6 @@ import logger from '../config/logger.mjs'
 const log = logger.child({ src: import.meta.url })
 const router = express.Router()
 
-/*
-router.get('/', async (req, res) => {
-  let data = {
-    title: 'O',
-    msg: 'Hai',
-    //  geo: req.geo,
-    //  localTime: req.localTime,
-  };
-  res.render('index', { data });
-  res.end();
-});
-*/
-
 router.get('/', async (req, res) => {
   const data = {
     title: 'O',
