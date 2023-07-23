@@ -10,10 +10,7 @@ export const login = async (email, ip, origin) => {
   let magicRecord = await getMagicRecord(email)
   let token = await generateToken(magicRecord.uuid)
   updateMagicRecord(magicRecord, token, ip)
-  return await sendLink(
-    email,
-    `https://${origin}/api/auth/token?email=${email}&token=${token}`
-  )
+  return await sendLink(email, `${origin}/token?email=${email}&token=${token}`)
 }
 
 const getMagicRecord = async (email) => {
@@ -65,6 +62,9 @@ export const checkMagicLink = async (email, token, origin) => {
   if (!magicRecord) return { code: 403, message: 'Invalid token.' }
   let user = await User.findOne({ uuid: magicRecord.userid })
   if (!user) user = await createUserRecord(magicRecord)
+  if (user.level == 0) user.level = 1
+  user.isAuthenticated = true
+  await user.save()
   magicRecord.userid = user.uuid
   await magicRecord.save()
   const userToken = await jwt.jwtSign(user.uuid, 'user', origin)
@@ -73,6 +73,8 @@ export const checkMagicLink = async (email, token, origin) => {
     code: 200,
     message: 'OK',
     uuid: user.uuid,
+    email: user.email,
+    level: user.level,
     username: user.username,
     displayName: user.displayName,
     userToken: userToken,

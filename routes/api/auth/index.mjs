@@ -33,6 +33,8 @@ router.get('/token', async (req, res) => {
     user: {
       uuid: userdata.uuid,
       username: userdata.username,
+      email: userdata.email,
+      level: userdata.level,
       displayName: userdata.displayName,
       authToken: userdata.authToken,
       userToken: userdata.userToken,
@@ -73,6 +75,8 @@ router.post('/client', async (req, res) => {
     user: {
       uuid: userdata.uuid,
       username: userdata.username,
+      email: userdata.email,
+      level: userdata.level,
       displayName: userdata.displayName,
       authToken: userdata.authToken,
       userToken: userdata.userToken,

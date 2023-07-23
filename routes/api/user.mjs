@@ -48,6 +48,7 @@ router.post('/login', jsonParser, async (req, res) => {
     req.userdata.displayName =
       req.user.displayName || req.user.username || 'Unknown User'
     req.userdata.level = req.user.level
+    req.userdata.email = req.user.email
     req.userdata.isAdmin = req.user.isAdmin
     req.userdata.isAuthenticated = true
 

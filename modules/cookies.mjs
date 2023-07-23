@@ -36,9 +36,9 @@ const cookieExpByType = (type) => {
 
 const cookieSettings = (type) => {
   let options = {
-    httpOnly: true,
-    secure: true,
-    //sameSite: 'Strict',
+    httpOnly: false,
+    secure: false,
+    sameSite: 'lax',
     expires: cookieExpByType(type),
   }
   return options
