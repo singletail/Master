@@ -51,9 +51,6 @@ const geolocation = async (req, res, next) => {
       })
 
       geo.footer = summary(geodata)
-      if (debug) {
-        log.info(`geo.footer set to: ${geo.footer}`)
-      }
     }
   }
   if (geo) {
@@ -65,7 +62,6 @@ const geolocation = async (req, res, next) => {
     geo.last = Date.now()
     geo.save()
   }
-  log.info(`geo done ${req.userdata.geo.footer}`)
   next()
 }
 

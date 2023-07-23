@@ -19,7 +19,6 @@ const initUserdata = async (req, res, next) => {
       offset: 0,
     },
   }
-  log.info(`init done ${req.userdata.username}`)
   next()
 }
 
