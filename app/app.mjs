@@ -14,7 +14,7 @@ import userdata from '../middleware/userdata.mjs'
 import expressLog from '../config/expressLogger.mjs'
 import errorLog from '../config/errorLogger.mjs'
 
-import { handler } from '../client/handler.js';
+import { handler as clientHandler } from '../client/handler.js';
 
 import trapRouter from '../routes/trap.mjs'
 import cspRouter from '../routes/csp.mjs'
@@ -25,6 +25,7 @@ import apiRouter from '../routes/api/index.mjs'
 import debugRouter from '../routes/debug.mjs'
 import errorRouter from '../routes/errors.mjs'
 import errorHandler from '../middleware/error.mjs'
+import { refreshBanCache, banList } from '../modules/ban.mjs'
 
 import logger from '../config/logger.mjs'
 const log = logger.child({ src: import.meta.url })
@@ -43,7 +44,7 @@ const corsOptions = {
 }
 
 app.use(cors({'origin': '*'}))
-//app.use(helmet())
+app.use(helmet())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(hpp())
@@ -60,24 +61,24 @@ app.use(expressLog)
 
 app.use('/', trapRouter)
 app.use('/', cspRouter)
-//app.use('/', indexRouter)
 app.use('/user', userRouter)
-//app.use('/auth', authRouter)
 app.use('/api', apiRouter)
 app.use('/debug', debugRouter)
-//app.use('/', express.static('/var/dev/ai/ass/dist/client/'));
 
-app.use(handler);
+app.use(clientHandler);
 
 app.use('/', errorRouter)
-
 app.use(errorLog)
 app.use(errorHandler)
 
+//log.info(`Config: ${JSON.stringify(config)}`);
+//log.info(`Origin: ${JSON.stringify(process.env.ORIGIN)}`);
+
+let localBanList = await refreshBanCache()
+log.info(`${localBanList.length} Bans: ${JSON.stringify(localBanList)}`)
+
+// config.nodeEnv
 
 
-log.info(`Config: ${JSON.stringify(config)}`);
-
-log.warn(`***** ORIGIN: ${JSON.stringify(process.env.ORIGIN)}`);
 
 export default app

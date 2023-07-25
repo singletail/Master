@@ -7,9 +7,12 @@ import logger from './config/logger.mjs'
 
 const log = logger.child({ src: import.meta.url })
 
-db()
+let server
+await db().then(() => {
+  server = http.createServer(app)
+})
 
-const server = http.createServer(app)
+//const server = http.createServer(app)
 
 server.on('upgrade', (request, socket, head) => {
   wsServer.handleUpgrade(request, socket, head, (socket) => {
