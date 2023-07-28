@@ -1,4 +1,4 @@
-import { wsMsgTick } from './message.mjs'
+import ws from './index.mjs'
 import logger from '../../config/logger.mjs'
 
 const log = logger.child({ src: import.meta.url })
@@ -12,7 +12,7 @@ let timerObj = {
 
 const wsTimerTick = async () => {
   timerObj.timerCount++
-  wsMsgTick(timerObj.timerCount)
+  ws.tick(timerObj.timerCount)
 }
 
 const wsTimerCreate = async (ip, reason, request) => {
