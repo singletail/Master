@@ -44,10 +44,8 @@ wsServer.on('connection', (socket, request) => {
 
   log.info(`${h}[connect][${clientId}] ${JSON.stringify(request['parsed'])}`)
 
-  //socket.on('message', (data, isBinary) =>
-  ;(socket.onmessage = (event) => {
+  (socket.onmessage = (event) => {
     wsIn.msg(ws.socketToId[socket], event.data)
-    //log.info(`${h}[incoming]${color('yellow')} ${data}`);
     wsIn.msg(ws.socketToId[socket], data)
     log.info(`${h}[incoming] ${JSON.stringify(event)}`)
   }),
