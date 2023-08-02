@@ -1,3 +1,4 @@
+import process from 'node:process'
 import 'dotenv/config'
 
 // import packageJson from '../package.json' assert { type: 'json' }
@@ -12,6 +13,12 @@ const config = {
     index: false,
     maxAge: '1d',
     redirect: false,
+  },
+
+  cors: {
+    origin: ['http://n0.tel', 'http://*.n0.tel', 'ws://n0.tel'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
   },
 
   client: {
@@ -39,22 +46,12 @@ const config = {
     private: process.env.JWT_PRIVATE,
   },
 
-  nextauth: {
-    url: process.env.NEXTAUTH_URL,
-    secret: process.env.NEXTAUTH_SECRET,
-  },
-
   smtp: {
     host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT),
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASSWORD,
     from: process.env.EMAIL_FROM,
-  },
-
-  clientOrigins: {
-    development: process.env.DEV_ORIGIN ?? '*',
-    production: process.env.PROD_ORIGIN ?? ['n0.tel','dev.n0.tel'],
   },
 
   nodeEnv: process.env.NODE_ENV ?? 'development',

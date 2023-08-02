@@ -1,24 +1,65 @@
+import process from 'node:process'
 import { mongoose } from 'mongoose'
-import config from '../config/config.mjs'
 import logger from '../config/logger.mjs'
 
 const log = logger.child({ src: import.meta.url })
-const mongoDB = config.db.uri
 
+
+const db = {
+
+  connect: async (uri) => {
+    try {
+      await mongoose.connect(uri)
+    } catch (error) {
+      log.error(`Mongoose Error ${error}`)
+    }
+
+    mongoose.connection.onnerror = (err) => log.error(`Mongoose Error ${err}`)
+    mongoose.connection.onconnecting = () => log.info('Mongoose Connecting.')
+    mongoose.connection.ondisconnecting = () => log.info('Mongoose Disconnecting.')
+    mongoose.connection.ondisconnected = () => log.error('Mongoose Disconnected.')
+    
+  },
+
+  disconnect: async () => {
+    await mongoose.connection.close().then(process.exit(0))
+  },
+}
+
+export default db
+
+
+
+
+
+
+/*
 const db = async () => {
   await mongoose.connect(mongoDB)
 }
 
-db().catch((err) => log.error(err))
+db().catch((err) => {
+return log.error(err)
+})
 
-mongoose.connection.on('error', (err) => log.error(`db conn err ${err}`))
-mongoose.connection.on('connecting', () => log.info(`db conn try ${mongoDB}`))
-mongoose.connection.on('connected', () => log.info(`db conn ok ${mongoDB}`))
-mongoose.connection.on('disconnecting', () => log.warn(`db disconnecting`))
-mongoose.connection.on('disconnected', () => log.warn(`db disconnected`))
+mongoose.connection.on('error', (err) => {
+return log.error(`db conn err ${err}`)
+})
+mongoose.connection.on('connecting', () => {
+return log.info(`db conn try ${mongoDB}`)
+})
+mongoose.connection.on('connected', () => {
+return log.info(`db conn ok ${mongoDB}`)
+})
+mongoose.connection.on('disconnecting', () => {
+return log.warn('db disconnecting')
+})
+mongoose.connection.on('disconnected', () => {
+return log.warn('db disconnected')
+})
 
 process.on('SIGINT', async () => {
-  log.warn(`db disconnect SIGINT`)
+  log.warn('db disconnect SIGINT')
   await mongoose.connection.close().then(process.exit(0))
 })
 
@@ -31,6 +72,9 @@ export const dbStatus = () => {
 }
 
 export default db
+*/
+
+
 
 /*
 mongoose.connection.on('connecting', () => {

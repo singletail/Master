@@ -4,7 +4,18 @@ import logger from '../../config/logger.mjs'
 const log = logger.child({ src: import.meta.url })
 const router = express.Router()
 
-router.get('/', async (req, res) => {
+
+const payload = {
+  proto: 'api',
+  type: 'req',
+  topic: 'test',
+  action: null,
+  code: null,
+  data: null,
+  id: null,
+}
+
+router.get('/', (req, res) => {
   const jsonres = {
     status: '/api/test get ok',
     userdata: req.userdata,
@@ -12,7 +23,21 @@ router.get('/', async (req, res) => {
   res.json(jsonres)
 })
 
-router.post('/', async (req, res) => {
+router.get('/ping', (req, res) => {
+  const order = { ...payload }
+  order.action = 'ping'
+  order.id = req.session.id
+
+
+  const jsonres = {
+    status: '/api/test get ok',
+    userdata: req.userdata,
+  }
+  res.json(jsonres)
+})
+
+
+router.post('/',  (req, res) => {
   log.info(`reached /api/test from ${req.ip}`)
   log.info(`req.body: ${JSON.stringify(req.body)}`)
   const jsonres = {

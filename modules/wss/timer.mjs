@@ -6,7 +6,7 @@ const log = logger.child({ src: import.meta.url })
 let timerObj = {
   timerId: null,
   timerRunning: false,
-  timerInterval: 5000,
+  timerInterval: 15000,
   timerCount: 0,
 }
 

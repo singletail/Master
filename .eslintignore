@@ -1,1 +1,13 @@
-app/app.mjs
+.npmrc
+.gitignore
+.DS_Store
+/node_modules
+/private
+/logs
+/client
+/static
+package-lock.json
+.env
+.env.*
+!.env.example
+

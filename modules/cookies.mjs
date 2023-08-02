@@ -1,6 +1,6 @@
 /*  Cookies  */
-import logger from '../config/logger.mjs'
-const log = logger.child({ src: import.meta.url })
+//import logger from '../config/logger.mjs'
+//const log = logger.child({ src: import.meta.url })
 
 const nowDate = () => {
   return new Date()
@@ -20,11 +20,13 @@ const addHours = (date, hours) => {
 
 const expTimeObj = (type) => {
   let date = nowDate()
-  if (type == 'auth') {
+  if (type === 'auth') {
     date = addHours(date, 1)
-  } else if (type == 'user') {
+  } else if (type === 'session') {
+    date = addHours(date, 1)
+  } else if (type === 'user') {
     date = addDays(date, 30)
-  } else if (type == 'tracker') {
+  } else if (type === 'tracker') {
     date = addDays(date, 400)
   }
   return date
@@ -35,10 +37,10 @@ const cookieExpByType = (type) => {
 }
 
 const cookieSettings = (type) => {
-  let options = {
-    httpOnly: false,
-    secure: false,
-    sameSite: 'lax',
+  const options = {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
     expires: cookieExpByType(type),
   }
   return options

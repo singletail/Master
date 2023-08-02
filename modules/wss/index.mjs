@@ -1,6 +1,4 @@
-import WebSocket from 'ws'
 import { v4 as uuidv4 } from 'uuid'
-import wsServer from '../../app/wss.mjs'
 import logger from '../../config/logger.mjs'
 
 const log = logger.child({ src: import.meta.url })
@@ -12,13 +10,13 @@ const ws = {
   id: 'sig_as_id_to_come',
 
   addSocket: (socket) => {
-    let id = uuidv4()
+    const id = uuidv4()
     ws.socketToId[socket] = id
     ws.idToSocket[id] = { socket: socket, serial: 0 }
   },
 
   removeSocket: (id) => {
-    let socket = ws.idToSocket[id].socket
+    const socket = ws.idToSocket[id].socket
     socket.terminate()
     ws.socketToId[socket] = null
     ws.idToSocket[id] = null
@@ -29,9 +27,9 @@ const ws = {
     type = 'req',
     topic = 'sys',
     action = 'tick',
-    data = {}
+    data = {},
   ) => {
-    let resObj = { ...res }
+    const resObj = { ...res }
     resObj.data = {}
     for (const key in data) {
       resObj.data[key] = data[key] // add sanitize
@@ -41,7 +39,7 @@ const ws = {
     resObj.topic = topic
     resObj.action = action
 
-    let socket = ws.check(id)
+    const socket = ws.check(id)
     if (!socket) {
       log.warn(`wss no socket. not sending: ${JSON.stringify(resObj)}`)
       return
@@ -53,12 +51,12 @@ const ws = {
   },
 
   check: (id) => {
-    let socketObj = ws.idToSocket[id]
+    const socketObj = ws.idToSocket[id]
     if (!socketObj) {
       ws.removeSocket(id)
       return null
     }
-    let socket = socketObj.socket
+    const socket = socketObj.socket
     return socket
   },
 
@@ -66,7 +64,7 @@ const ws = {
     type = 'req',
     topic = 'sys',
     action = 'tick',
-    data = {}
+    data = {},
   ) => {
     for (const id in ws.idToSocket) {
       await ws.request(id, type, topic, action, data)
@@ -74,15 +72,18 @@ const ws = {
   },
 
   tick: async (timerCount) => {
-    let data = { count: timerCount }
+    const data = { count: timerCount }
     await ws.broadcast('req', 'sys', 'tick', data)
   },
 }
 
-let res = {
+const res = {
   origin: 'server',
   id: ws.id,
   serial: ws.counter,
 }
 
 export default ws
+
+
+                    

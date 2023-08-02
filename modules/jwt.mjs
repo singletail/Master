@@ -18,21 +18,28 @@ getKey()
 
 //------- new:
 
-export const areClaimsValid = async (jwt) => {
+export const areClaimsValid = (jwt) => {
   let jwtDateValid
   const claims = jose.decodeJwt(jwt)
-  let nowCheck = now()
+  const nowCheck = now()
   if (claims.exp && claims.exp > nowCheck) {
     jwtDateValid = true
   }
   return jwtDateValid
 }
 
+export const decodeToken = (jwt) => {
+  const claims = jose.decodeJwt(jwt)
+  return claims
+}
+
 export const verifyToken = async (jwt, origin = 'https://n0.tel') => {
   let issuer = 'https://n0.tel'
-  if (origin === 'http://dev.n0.tel') issuer = origin
+  if (origin === 'http://dev.n0.tel') {
+    issuer = origin
+  }
   //log.info(`jwtSign( ${valueString}, ${valType}, ${origin}, ${issuer} )`)
-  const { payload, protectedHeader } = await jose.jwtVerify(jwt, keyPrivate, {
+  const { payload } = await jose.jwtVerify(jwt, keyPrivate, {
     issuer: issuer,
     audience: issuer,
   })
@@ -42,13 +49,15 @@ export const verifyToken = async (jwt, origin = 'https://n0.tel') => {
 export const jwtSign = async (
   valueString,
   valType = 'auth',
-  origin = 'https://n0.tel'
+  origin = 'https://n0.tel',
 ) => {
   log.info(`jwtSign( ${valueString}, ${valType}, ${origin} )`)
   let issuer = 'https://n0.tel'
-  if (origin === 'http://dev.n0.tel') issuer = origin
+  if (origin === 'http://dev.n0.tel') {
+issuer = origin
+}
   log.info(`jwtSign( ${valueString}, ${valType}, ${origin}, ${issuer} )`)
-  let exp = expTime(valType)
+  const exp = expTime(valType)
   const jwt = await new jose.SignJWT({ sub: valueString })
     .setProtectedHeader({ alg: 'EdDSA' })
     .setIssuedAt()
@@ -60,12 +69,15 @@ export const jwtSign = async (
 }
 
 export const checkAndVerifyToken = async (token, origin = 'https://n0.tel') => {
-  if (origin !== 'https://n0.tel' && origin !== 'https://dev.n0.tel')
-    return null
+  if (origin !== 'https://n0.tel' && origin !== 'https://dev.n0.tel') {
+return null
+}
   log.info(`origin for token is ${origin}`)
-  let valid = await areClaimsValid(token)
-  if (!valid) return null
-  let payload = await verifyToken(token, origin)
+  const valid = areClaimsValid(token)
+  if (!valid) {
+    return null
+  }
+  const payload = await verifyToken(token, origin)
   return payload
 }
 

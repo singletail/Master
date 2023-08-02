@@ -1,0 +1,177 @@
+* html {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+body {
+    background-color: black;
+    margin: 0;
+    padding: 0;
+}
+
+.bk {
+    background: url('/img/locked.jpg') no-repeat fixed top center;
+    background-size: cover;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    z-index: 0;
+    color: #0000ff;
+    justify-content: center;
+}
+
+.topbox {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 16px;
+    width: 90%;
+    height: 10%;
+    top: 2%;
+    left: 4%;
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-left: 8px;
+    padding-right: 8px;
+    border: 1px solid rgba(0, 0, 0, 1);
+}
+
+.topboxtext {
+    position: absolute;
+    margin: 0;
+    top: 50%;
+    left: 50%;
+    z-index: 101;
+    color: #ffffff;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-family: 'Apple2';
+    font-size: 1em;
+    transform: translate(-50%, -50%);
+}
+
+.box {
+    color: #ffffff;
+    font-family: 'Prompt';
+    font-size: 1em;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 16px;
+    width: 90%;
+    height: 30%;
+    top: 14%;
+    left: 4%;
+    z-index: 100;
+    justify-content: left;
+    align-items: left;
+    text-align: left;
+    padding-top: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border: 1px solid rgba(0, 0, 0, 1);
+}
+
+.debug {
+    color: #ffffff;
+    font-family: '3270';
+    font-size: 1em;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 16px;
+    width: 90%;
+    height: 50%;
+    bottom: 1%;
+    left: 4%;
+    z-index: 100;
+    justify-content: left;
+    align-items: left;
+    text-align: left;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 8px;
+    border: 1px solid rgba(0, 0, 0, 1);
+}
+
+.cRed {
+    color: #ff0000;
+}
+.cOrange {
+    color: #ff8000;
+}
+.cYellow {
+    color: #ffff00;
+}
+.cGreen {
+    color: #00ff00;
+}
+.cBlue {
+    color: #0000ff;
+}
+.cViolet {
+    color: #8000ff;
+}
+.cPink {
+    color: #ff00ff;
+}
+.cWhite {
+    color: #ffffff;
+}
+.cBlack {
+    color: #000000;
+}
+.cCyan {
+    color: #00ffff;
+}
+
+
+
+
+a:link {
+    color: white;
+    text-decoration: none;
+}
+
+a:visited {
+    color: white;
+    text-decoration: none;
+}
+
+a:hover {
+    color: white;
+    text-decoration: none;
+    text-shadow: 0 0 1px white, 0 0 2px white;
+}
+
+a:active {
+    color: white;
+    text-decoration: none;
+}
+
+@font-face {
+    font-family: 'Prompt';
+    font-weight: 300;
+    font-style: normal;
+    src: url('/font/Prompt-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: '3270';
+    font-weight: 300;
+    font-style: normal;
+    src: url('/font/3270Medium.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Apple2';
+    font-weight: 300;
+    font-style: normal;
+    src: url('/font/PrintChar21.woff2') format('woff2');
+}

@@ -1,3 +1,4 @@
+import expo from '../../lib/expo.js'
 import Magic from '../../models/magic.mjs'
 import User from '../../models/user.mjs'
 import * as jwt from '../../modules/jwt.mjs'
@@ -6,9 +7,20 @@ import logger from '../../config/logger.mjs'
 
 const log = logger.child({ src: import.meta.url })
 
+export const email = async (id, email) => {
+  const magicRecord = await getMagicRecord(email)
+  const token = await generateToken(magicRecord.uuid)
+  magicRecord.token = token
+  await magicRecord.save()
+  const result = await sendLink(email, `https://n0.tel/auth?email=${email}&token=${token}`)
+  log.info(`email sent: ${JSON.stringify(result)}`)
+  expo.res(id, 'auth', 'email', 'sent')
+}
+
+
 export const login = async (email, ip, origin) => {
-  let magicRecord = await getMagicRecord(email)
-  let token = await generateToken(magicRecord.uuid)
+  const magicRecord = await getMagicRecord(email)
+  const token = await generateToken(magicRecord.uuid)
   updateMagicRecord(magicRecord, token, ip)
   return await sendLink(email, `${origin}/token?email=${email}&token=${token}`)
 }
@@ -22,7 +34,7 @@ const getMagicRecord = async (email) => {
 }
 
 const createMagicRecord = async (email, ip) => {
-  let magicRecord = await new Magic({
+  const magicRecord = await new Magic({
     email: email,
   })
   await magicRecord.save()
@@ -44,7 +56,7 @@ const generateToken = async (uuid) => {
 }
 
 const createUserRecord = async (magicRecord) => {
-  let userRecord = await new User({
+  const userRecord = await new User({
     username: magicRecord.email,
     email: magicRecord.email,
     displayName: magicRecord.email,
@@ -58,7 +70,7 @@ export const checkMagicLink = async (email, token, origin) => {
   const magicTokenPayload = await jwt.checkAndVerifyToken(token, origin)
   const magicToken = magicTokenPayload.sub
   if (!magicToken) return { code: 403, message: 'Invalid token.' }
-  let magicRecord = await Magic.findOne({ email: email, token: token })
+  const magicRecord = await Magic.findOne({ email: email, token: token })
   if (!magicRecord) return { code: 403, message: 'Invalid token.' }
   let user = await User.findOne({ uuid: magicRecord.userid })
   if (!user) user = await createUserRecord(magicRecord)

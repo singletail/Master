@@ -28,7 +28,7 @@ const sendPromise = async (options) => {
 }
 
 const send = async (mail) => {
-  let mailOptions = {
+  const mailOptions = {
     from: mail.from,
     to: mail.to,
     subject: mail.subject,
@@ -49,7 +49,7 @@ const linkHTMLTemplate = ({ link }) => `
 `
 
 export const sendLink = async (email, link) => {
-  let mailOptions = {
+  const mailOptions = {
     from: `"${config.smtp.from}" <${config.smtp.user}>`,
     to: email,
     subject: 'n0.tel magic link',
@@ -62,7 +62,7 @@ export const sendLink = async (email, link) => {
 
 export const verifySMTP = async () => {
   log.info(`verifySMTP ${config.smtp.user} ${config.smtp.pass}`)
-  transporter.verify(function (error, success) {
+  transporter.verify((error, success) => {
     if (error) {
       log.warn(`verifySMTP failed: ${error}`)
     } else {
