@@ -27,7 +27,7 @@ const sendPromise = async (options) => {
   })
 }
 
-const htmlMsg = '<form action="http://localhost:6900/auth"><input type="hidden" id="email" name="email" value="t@wse.nyc"><input type="hidden" id="token" name="token" value="tokengoeshere"><input type="submit" value="Login"></form>'
+// const htmlMsg = '<form action="http://localhost:6900/auth"><input type="hidden" id="email" name="email" value="t@wse.nyc"><input type="hidden" id="token" name="token" value="tokengoeshere"><input type="submit" value="Login"></form>'
 
 
 const send = async (mail) => {
@@ -36,7 +36,7 @@ const send = async (mail) => {
     to: mail.to,
     subject: mail.subject,
     text: mail.text,
-    html: htmlMsg,
+    html: mail.text,
   }
   const sendStatus = await sendPromise(mailOptions)
   return `${sendStatus.accepted}`

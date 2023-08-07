@@ -31,7 +31,7 @@ app.set('views', './views')
 ejs.clearCache()
 app.set('view engine', 'ejs')
 
-app.use(helmet())
+app.use(helmet({ crossOriginEmbedderPolicy: false }))
 app.use(cors(config.cors))
 app.use(express.json())
 app.use(cookieParser())

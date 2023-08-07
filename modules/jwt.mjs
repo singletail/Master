@@ -22,9 +22,7 @@ export const areClaimsValid = (jwt) => {
   let jwtDateValid
   const claims = jose.decodeJwt(jwt)
   const nowCheck = now()
-  if (claims.exp && claims.exp > nowCheck) {
-    jwtDateValid = true
-  }
+  if (claims.exp && claims.exp > nowCheck) jwtDateValid = true
   return jwtDateValid
 }
 
@@ -35,10 +33,7 @@ export const decodeToken = (jwt) => {
 
 export const verifyToken = async (jwt, origin = 'https://n0.tel') => {
   let issuer = 'https://n0.tel'
-  if (origin === 'http://dev.n0.tel') {
-    issuer = origin
-  }
-  //log.info(`jwtSign( ${valueString}, ${valType}, ${origin}, ${issuer} )`)
+  if (origin === 'http://dev.n0.tel') issuer = origin
   const { payload } = await jose.jwtVerify(jwt, keyPrivate, {
     issuer: issuer,
     audience: issuer,
@@ -69,14 +64,9 @@ issuer = origin
 }
 
 export const checkAndVerifyToken = async (token, origin = 'https://n0.tel') => {
-  if (origin !== 'https://n0.tel' && origin !== 'https://dev.n0.tel') {
-return null
-}
-  log.info(`origin for token is ${origin}`)
+  if (origin !== 'https://n0.tel' && origin !== 'https://dev.n0.tel') return null
   const valid = areClaimsValid(token)
-  if (!valid) {
-    return null
-  }
+  if (valid !== true) return null
   const payload = await verifyToken(token, origin)
   return payload
 }
