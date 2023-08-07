@@ -1,12 +1,12 @@
-import expo from '../../lib/expo.js'
 import Magic from '../../models/magic.mjs'
 import User from '../../models/user.mjs'
 import * as jwt from '../../modules/jwt.mjs'
-import { sendLink, verifySMTP } from '../smtp.mjs'
+import { sendLink } from '../smtp.mjs'
 import logger from '../../config/logger.mjs'
 
 const log = logger.child({ src: import.meta.url })
 
+/*
 export const email = async (id, email) => {
   const magicRecord = await getMagicRecord(email)
   const token = await generateToken(magicRecord.uuid)
@@ -14,9 +14,9 @@ export const email = async (id, email) => {
   await magicRecord.save()
   const result = await sendLink(email, `https://n0.tel/auth?email=${email}&token=${token}`)
   log.info(`email sent: ${JSON.stringify(result)}`)
-  expo.res(id, 'auth', 'email', 'sent')
+  expo.res(id, ['auth', 'email', 'sent'])
 }
-
+*/
 
 export const login = async (email, ip, origin) => {
   const magicRecord = await getMagicRecord(email)

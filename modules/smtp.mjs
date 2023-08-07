@@ -27,15 +27,19 @@ const sendPromise = async (options) => {
   })
 }
 
+const htmlMsg = '<form action="http://localhost:6900/auth"><input type="hidden" id="email" name="email" value="t@wse.nyc"><input type="hidden" id="token" name="token" value="tokengoeshere"><input type="submit" value="Login"></form>'
+
+
 const send = async (mail) => {
   const mailOptions = {
     from: mail.from,
     to: mail.to,
     subject: mail.subject,
     text: mail.text,
-    html: mail.html,
+    html: htmlMsg,
   }
-  return await sendPromise(mailOptions)
+  const sendStatus = await sendPromise(mailOptions)
+  return `${sendStatus.accepted}`
 }
 
 const linkTextTemplate = ({ link }) => `
@@ -56,12 +60,11 @@ export const sendLink = async (email, link) => {
     text: linkTextTemplate({ link }),
     html: linkHTMLTemplate({ link }),
   }
-  log.info(`sending email: ${JSON.stringify(mailOptions)}`)
-  return await send(mailOptions)
+  const sentStatus = await send(mailOptions)
+  return sentStatus
 }
 
 export const verifySMTP = async () => {
-  log.info(`verifySMTP ${config.smtp.user} ${config.smtp.pass}`)
   transporter.verify((error, success) => {
     if (error) {
       log.warn(`verifySMTP failed: ${error}`)

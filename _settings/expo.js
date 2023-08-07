@@ -11,18 +11,18 @@ const packArr = (cmdArr) => {
     for (let i = 0; i < cmdArr.length; i++) {
         msg += cmdArr[i]
         if (i < cmdArr.length - 1) {
- msg += sep 
-}
+            msg += sep 
+        }
     }
     return msg
 }
 
 const expo = {
 
-    msg: (id, msg) => {
-        log.info(`msg() id: ${id} msg: ${msg}`)
+    msg: (id, msg) => { // incoming
+        log.info(`expo/msg(): (msg): ${msg} from ${id}`)
         const msgStr = msg.toString()
-        log.info(`msg() id: ${id} msg: ${msgStr}`)
+        log.info(`expo/msg(): (msg.toString): ${msgStr} from ${id}`)
         const cmdArr = msgStr.split(sep)
         switch (cmdArr[0]) {
             case 'req':
@@ -44,6 +44,7 @@ const expo = {
     },
 
     req: (id, cmdArr) => {
+        log.info(`expo.req() stringified array: ${JSON.stringify(cmdArr)}`)
         switch (cmdArr[1]) {
             case 'auth':
                 expo.auth(id, cmdArr)
@@ -57,6 +58,7 @@ const expo = {
     },
 
     auth: (id, cmdArr) => {
+        log.info(`expo.auth() stringified array: ${JSON.stringify(cmdArr)}`)
         switch (cmdArr[2]) {
             case 'email':
                 email(id, cmdArr[3])
@@ -69,6 +71,7 @@ const expo = {
     sys: (id, cmdArr) => {
         switch (cmdArr[2]) {
             case 'ping':
+                log.info('got ping, sending pong.')
                 sock.send(id, packArr(['res', 'sys', 'pong']))
                 break
             default:
@@ -76,13 +79,10 @@ const expo = {
         }
     },
 
-    res: (id, cmdArr) => {
-        let msg = ''
-        for (let i = 0; i < cmdArr.length; i++) {
-            msg += cmdArr[i]
-            msg += sep
-        }
-        sock.send(id, msg)
+    res: (id, msg) => {
+        let output
+        typeof msg === 'object' ? output = packArr(msg) : output = msg
+        sock.send(id, output)
     },
             
                 
