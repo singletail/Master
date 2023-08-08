@@ -2,6 +2,7 @@ import { WebSocketServer } from 'ws'
 import { color } from '../config/colors.mjs'
 import logger from '../config/logger.mjs'
 import sock from '../lib/ws/sock.js'
+import timer from '../lib/ws/timer.js'
 
 const log = logger.child({ src: import.meta.url })
 const h = `${color('pink')}[websockets]${color('cyan')}`
@@ -23,5 +24,7 @@ wsServer.on('connection', (socket, request) => {
   socket.on('message', (message) => sock.message(id, message))
   socket.on('close', () => sock.close(id))
 })
+
+timer.start()
 
 export default wsServer
