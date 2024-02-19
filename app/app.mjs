@@ -16,6 +16,7 @@ import trapRouter from '../routes/trap.mjs'
 import indexRouter from '../routes/index.mjs'
 import apiRouter from '../routes/api/index.mjs'
 import errorRouter from '../routes/errors.mjs'
+import interfaceRouter from '../interface/api.js'
 
 import errorHandler from '../middleware/error.mjs'
 
@@ -48,6 +49,9 @@ app.use(expressLog)
 app.use('/', trapRouter)
 app.use('/', indexRouter)
 app.use('/api', apiRouter)
+
+// new experimental:
+app.use('/', interfaceRouter)
 
 // app.use(clientHandler)
 

@@ -40,12 +40,25 @@ router.get('/ping', (req, res) => {
 router.post('/',  (req, res) => {
   log.info(`reached /api/test from ${req.ip}`)
   log.info(`req.body: ${JSON.stringify(req.body)}`)
+
   const jsonres = {
     status: 'post ok',
-    geo: req.userdata.geo,
-    tracker: req.tracker,
+    //geo: req.userdata.geo,
+    //tracker: req.tracker,
   }
   res.json(jsonres)
+})
+
+
+
+router.get('/wc(/*)?', (req, res) => {
+  log.info(`reached /api/wc from ${req.ip}`)
+  res.json({ status: 'wc' })
+})
+
+router.get('/:id/:xd', (req, res) => {
+  log.info(`reached /api/wc from ${req.params.ip}`)
+  res.json({ id: req.params.id, xd: req.params.xd  })
 })
 
 export default router

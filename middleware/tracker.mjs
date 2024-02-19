@@ -6,16 +6,17 @@ import logger from '../config/logger.mjs'
 const log = logger.child({ src: import.meta.url })
 
 const tracker = async (req, res, next) => {
+  log.info('tracker()', req.cookies.tracker)
   log.info(
     `Tracker middleware: ${JSON.stringify(req.cookies)}, ${JSON.stringify(
-      req.headers
-    )}}`
+      req.headers,
+    )}}`,
   )
   let tracker, stale
   if (req.cookies.tracker) {
-    let trackerPayload = await jwt.checkAndVerifyToken(
+    const trackerPayload = await jwt.checkAndVerifyToken(
       req.cookies.tracker,
-      req.headers.origin
+      req.headers.origin,
     )
     if (trackerPayload) {
       tracker = await Tracker.findOne({ uuid: trackerPayload.sub })

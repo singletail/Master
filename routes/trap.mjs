@@ -59,4 +59,12 @@ router.all('*cpanel*', async (req, res, next) => {
     next(err)
 })
 
+router.all('*code_signing*', async (req, res, next) => {
+    const reason = req.url
+    await ban.add(req.ip, req.url, reason)
+    const err = new Error('Banned.')
+    err.status = 401
+    next(err)
+})
+
 export default router

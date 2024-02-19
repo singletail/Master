@@ -6,6 +6,7 @@ import logger from '../config/logger.mjs'
 const log = logger.child({ src: import.meta.url })
 
 const authenticate = async (req, res, next) => {
+  log.info('authenticate()')
   let authUuid, userUuid, user, err
   if (req.cookies.auth) {
     let authPayload = await jwt.checkAndVerifyToken(req.cookies.auth)
